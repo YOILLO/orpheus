@@ -289,12 +289,42 @@
                     .substring(0, 50);
             }
 
-            // Парсинг CSV с поддержкой slug (опционально)
+            // Надёжный парсер строки CSV с учётом кавычек и запятых внутри полей
+            function parseCSVLine(line) {
+                const result = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let i = 0; i < line.length; i++) {
+                    const char = line[i];
+                    const nextChar = line[i + 1];
+                    
+                    if (char === '"' && !inQuotes) {
+                        inQuotes = true;
+                    } else if (char === '"' && inQuotes && nextChar === '"') {
+                        // Экранированная кавычка ""
+                        current += '"';
+                        i++; // пропускаем следующую кавычку
+                    } else if (char === '"' && inQuotes) {
+                        inQuotes = false;
+                    } else if (char === ',' && !inQuotes) {
+                        result.push(current);
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                result.push(current);
+                return result;
+            }
+
+            // Парсинг всего CSV с использованием parseCSVLine
             function parseCSV(csvText) {
                 const lines = csvText.trim().split('\n');
                 if (lines.length < 2) return [];
 
-                const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                // Заголовки
+                const headers = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase());
                 const dateIdx = headers.indexOf('date');
                 const userIdx = headers.indexOf('user');
                 const textIdx = headers.indexOf('text');
@@ -309,23 +339,23 @@
                     const line = lines[i].trim();
                     if (!line) continue;
 
-                    const parts = line.split(',');
-                    let date = parts[dateIdx]?.trim() || '';
-                    let user = parts[userIdx]?.trim() || 'Аноним';
-                    let text = '';
-                    if (parts.length > 3) {
-                        text = parts.slice(textIdx).join(',').trim();
+                    const values = parseCSVLine(line);
+                    
+                    // Извлекаем значения по индексам, убираем лишние пробелы и кавычки (если остались)
+                    const date = (values[dateIdx] || '').trim().replace(/^"|"$/g, '');
+                    const user = (values[userIdx] || '').trim().replace(/^"|"$/g, '') || 'Аноним';
+                    const text = (values[textIdx] || '').trim().replace(/^"|"$/g, '');
+                    
+                    // Slug: если есть в CSV — берём его, иначе генерируем из текста
+                    let slug = '';
+                    if (slugIdx !== -1 && values[slugIdx]) {
+                        slug = values[slugIdx].trim().replace(/^"|"$/g, '');
                     } else {
-                        text = parts[textIdx]?.trim() || '';
+                        slug = generateSlug(text);
                     }
 
-                    // Определяем slug
-                    let slug = (slugIdx !== -1 && parts[slugIdx]) 
-                        ? parts[slugIdx].trim() 
-                        : generateSlug(text);
-
                     posts.push({ 
-                        id: i - 1, // индекс в массиве
+                        id: i - 1,
                         date, 
                         user, 
                         text, 
@@ -351,7 +381,6 @@
                 sorted.forEach((post, index) => {
                     const rowClass = (index % 2 === 0) ? 'post-row' : 'post-row-alt';
                     const folderIcon = '📁';
-                    // Ссылка на пост с хешем
                     const postLink = `#/post/${post.slug || post.id}`;
                     
                     html += `<tr class="${rowClass}">`;
@@ -391,21 +420,19 @@
                 listView.style.display = 'block';
                 singleView.style.display = 'none';
                 navTitle.textContent = 'Архив записей';
-                // Убираем хеш, чтобы не зацикливаться
                 if (window.location.hash) {
                     history.pushState("", document.title, window.location.pathname + window.location.search);
                 }
             }
 
-            // Роутер: обрабатывает хеш и показывает нужное
+            // Роутер
             function handleHash() {
-                const hash = window.location.hash.substring(1); // без #
+                const hash = window.location.hash.substring(1);
                 if (!hash || hash === '/') {
                     showListView();
                     return;
                 }
 
-                // Ожидаем формат #/post/slug или #/post/123
                 const match = hash.match(/^\/post\/(.+)$/);
                 if (!match) {
                     showListView();
@@ -413,13 +440,11 @@
                 }
 
                 const slugOrId = match[1];
-                // Ищем пост по slug или id
                 const post = allPosts.find(p => p.slug === slugOrId || p.id.toString() === slugOrId);
                 
                 if (post) {
                     showSinglePost(post);
                 } else {
-                    // Пост не найден — показываем ленту
                     showListView();
                 }
             }
@@ -433,7 +458,6 @@
                     const csvText = await response.text();
                     allPosts = parseCSV(csvText);
                     renderPostsTable(allPosts);
-                    // После загрузки проверяем хеш
                     handleHash();
                 } catch (err) {
                     console.error(err);
