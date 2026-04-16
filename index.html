@@ -1,48 +1,83 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Уголок Исследователя — блог о необъяснимом</title>
+    <meta charset="windows-1251"> <!-- Для аутентичности, но можно оставить utf-8 -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Уголок Исследователя — форум о непознанном</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <div class="blog-wrapper">
-        <!-- Шапка в стиле Blogspot 2004 -->
-        <div class="header">
-            <h1 class="blog-title">📡 УГОЛОК ИССЛЕДОВАТЕЛЯ</h1>
-            <p class="blog-description">Паранормальное · Конспирология · Хроники наблюдений</p>
-        </div>
+<body bgcolor="#E1E1E1" text="#000000" link="#0000EE" vlink="#551A8B" alink="#EE0000">
+    <!-- Верхняя плашка как на форумах phpBB -->
+    <table width="95%" border="0" cellpadding="4" cellspacing="0" align="center" class="maintable">
+        <tr>
+            <td width="100%" bgcolor="#336699" class="header"><font color="#FFFFFF"><b>Уголок Исследователя</b> :: Паранормальные явления, конспирология, наблюдения</font></td>
+        </tr>
+    </table>
 
-        <!-- Основная колонка с постами -->
-        <div class="content">
-            <div class="posts-header">
-                <h2>📋 ПОСЛЕДНИЕ ЗАПИСИ</h2>
-                <div class="refresh-btn" id="refresh-btn" title="Обновить ленту">⟳ ОБНОВИТЬ</div>
-            </div>
+    <!-- Навигационная цепочка -->
+    <table width="95%" border="0" cellpadding="2" cellspacing="0" align="center" class="nav">
+        <tr>
+            <td><a href="#">Главная</a> &raquo; <a href="#">Дневники наблюдений</a> &raquo; <b>Архив записей</b></td>
+            <td align="right"><a href="#">Регистрация</a> | <a href="#">Вход</a></td>
+        </tr>
+    </table>
 
-            <!-- Сюда будут вставлены посты из CSV -->
-            <div id="posts-container" class="posts-container">
-                <div class="loading">Загрузка досье...</div>
-            </div>
+    <br>
 
-            <!-- Блок "О блоге" в стиле сайдбара -->
-            <div class="sidebar">
-                <div class="about-box">
-                    <h3>📌 ОБО МНЕ</h3>
-                    <p>Исследователь-любитель. Фиксирую аномалии, теории заговора и всё, что не вписывается в официальную картину мира.</p>
-                    <p class="small">Веб-дневник с 2004 года.</p>
-                </div>
-                <div class="counter-box">
-                    <span>👁️ Посетителей: 000420</span>
-                </div>
-            </div>
-        </div>
+    <!-- Основной блок с постами в виде таблицы форума -->
+    <table width="95%" border="0" cellpadding="4" cellspacing="1" align="center" bgcolor="#006699" class="forumtable">
+        <!-- Заголовок таблицы -->
+        <tr>
+            <td colspan="2" bgcolor="#6699CC" class="cathead"><font color="#FFFFFF"><b>📋 ПОСЛЕДНИЕ ЗАПИСИ В ДОСЬЕ</b></font></td>
+            <td width="15%" align="center" bgcolor="#6699CC"><font color="#FFFFFF"><b>Автор</b></font></td>
+            <td width="15%" align="center" bgcolor="#6699CC"><font color="#FFFFFF"><b>Дата</b></font></td>
+        </tr>
 
-        <!-- Футер с копирайтом -->
-        <div class="footer">
-            © 2004–2025 Уголок Исследователя | Работает на статическом CSV | <a href="#">RSS</a> (нерабочая)
-        </div>
+        <!-- Сюда будут вставлены строки с постами через JS -->
+        <tbody id="posts-table-body">
+            <tr>
+                <td colspan="4" align="center" bgcolor="#F1F1F1"><i>Загрузка данных...</i></td>
+            </tr>
+        </tbody>
+
+        <!-- Нижняя панель с кнопками -->
+        <tr>
+            <td colspan="4" bgcolor="#D1D7DC" align="right">
+                <input type="button" class="btn" id="refresh-btn" value="⟳ Обновить ленту">
+                &nbsp;
+                <input type="button" class="btn" value="📌 Новая тема" disabled>
+                &nbsp;
+                <input type="button" class="btn" value="🔒 Ответить" disabled>
+            </td>
+        </tr>
+    </table>
+
+    <br>
+
+    <!-- Информационные блоки: кто онлайн, статистика -->
+    <table width="95%" border="0" cellpadding="4" cellspacing="1" align="center" bgcolor="#006699">
+        <tr>
+            <td bgcolor="#6699CC" colspan="2"><font color="#FFFFFF"><b>Информация о разделе</b></font></td>
+        </tr>
+        <tr>
+            <td bgcolor="#E1E1E1" width="50%">
+                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> <b>Модератор:</b> Искатель_Истины<br>
+                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> <b>Тем:</b> <span id="topic-count">0</span> &nbsp;|&nbsp; <b>Сообщений:</b> <span id="post-count">0</span>
+            </td>
+            <td bgcolor="#E1E1E1" align="right">
+                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> <b>Сейчас на форуме:</b> 2 гостя, 1 пользователь<br>
+                <a href="#">Охотник_за_НЛО</a> [<a href="#">Выйти</a>]
+            </td>
+        </tr>
+    </table>
+
+    <br>
+
+    <!-- Копирайт -->
+    <div align="center" class="copyright">
+        Powered by <a href="#">phpBB</a> &copy; 2001, 2005 phpBB Group<br>
+        Русская поддержка <a href="#">phpBB</a><br>
+        <font size="1">Запрещено копирование материалов без согласия администрации.</font>
     </div>
 
     <script src="script.js"></script>
