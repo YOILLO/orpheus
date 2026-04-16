@@ -1,124 +1,97 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const notesListEl = document.getElementById('notes-list');
-    const dateInput = document.getElementById('note-date');
-    const textInput = document.getElementById('note-text');
-    const addBtn = document.getElementById('add-btn');
-    const resetBtn = document.getElementById('reset-btn');
-    const entryCountSpan = document.getElementById('entry-count');
+    const container = document.getElementById('posts-container');
+    const refreshBtn = document.getElementById('refresh-btn');
 
-    const today = new Date().toISOString().split('T')[0];
-    dateInput.value = today;
-
-    const STORAGE_KEY = 'conspiracyNotes';
-    let localNotes = [];
-
-    function loadLocalNotes() {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            try { localNotes = JSON.parse(stored); } catch(e) { localNotes = []; }
-        } else { localNotes = []; }
-    }
-
-    function saveLocalNotes() {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(localNotes));
-    }
-
-    function parseCSV(csvText) {
-        const lines = csvText.trim().split('\n');
-        if (lines.length < 2) return [];
-        const headers = lines[0].split(',').map(h => h.trim());
-        const dateIndex = headers.indexOf('date');
-        const textIndex = headers.indexOf('text');
-        if (dateIndex === -1 || textIndex === -1) return [];
-        const result = [];
-        for (let i = 1; i < lines.length; i++) {
-            const line = lines[i].trim();
-            if (!line) continue;
-            const values = line.split(',');
-            if (values.length >= 2) {
-                result.push({
-                    date: values[dateIndex]?.trim() || '',
-                    text: values[textIndex]?.trim() || ''
-                });
-            }
-        }
-        return result;
-    }
-
-    async function loadCSVNotes() {
-        try {
-            const response = await fetch('data.csv');
-            if (!response.ok) throw new Error(`Ошибка загрузки CSV: ${response.status}`);
-            const csvText = await response.text();
-            return parseCSV(csvText);
-        } catch (error) {
-            console.error('Не удалось загрузить CSV:', error);
-            return [];
-        }
-    }
-
-    function renderNotes(csvNotes) {
-        const allNotes = [...csvNotes, ...localNotes];
-        entryCountSpan.textContent = allNotes.length;
-
-        if (allNotes.length === 0) {
-            notesListEl.innerHTML = '<div class="empty-message">📁 Досье пусто. Добавьте первое наблюдение.</div>';
-            return;
-        }
-
-        allNotes.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-        let html = '';
-        allNotes.forEach(note => {
-            html += `
-                <div class="note-item">
-                    <span class="note-date">${escapeHtml(note.date) || '—'}</span>
-                    <span class="note-text">${escapeHtml(note.text) || '—'}</span>
-                </div>
-            `;
-        });
-        notesListEl.innerHTML = html;
-    }
-
+    // Функция безопасного экранирования
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
 
-    function addLocalNote() {
-        const date = dateInput.value.trim();
-        const text = textInput.value.trim();
-        if (!date || !text) {
-            alert('[СИСТЕМА] Необходимо указать дату и описание.');
+    // Парсинг CSV с учетом возможных запятых внутри полей (простой подход)
+    function parseCSV(csvText) {
+        const lines = csvText.trim().split('\n');
+        if (lines.length < 2) return [];
+
+        // Заголовки
+        const headers = lines[0].split(',').map(h => h.trim());
+        const dateIdx = headers.indexOf('date');
+        const userIdx = headers.indexOf('user');
+        const textIdx = headers.indexOf('text');
+
+        if (dateIdx === -1 || userIdx === -1 || textIdx === -1) {
+            throw new Error('CSV должен содержать колонки date, user, text');
+        }
+
+        const posts = [];
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
+
+            // Упрощённый сплит: если в тексте есть запятые, это сломает парсинг,
+            // но для демонстрации оставим так (можно улучшить через регулярки или библиотеку)
+            const parts = line.split(',');
+            // Восстановим текст, если он содержал запятые (предполагаем, что только текст может содержать запятые)
+            let date = parts[dateIdx]?.trim() || '';
+            let user = parts[userIdx]?.trim() || 'Аноним';
+            // Текст — всё, что после первых двух колонок (если колонок >3)
+            let text = '';
+            if (parts.length > 3) {
+                // Собираем оставшиеся части в одну строку через запятую
+                text = parts.slice(2).join(',').trim();
+            } else {
+                text = parts[textIdx]?.trim() || '';
+            }
+
+            posts.push({ date, user, text });
+        }
+        return posts;
+    }
+
+    // Рендер постов
+    function renderPosts(posts) {
+        if (!posts.length) {
+            container.innerHTML = '<div class="empty-message">📭 В досье пока нет записей. Добавьте их в data.csv</div>';
             return;
         }
-        localNotes.push({ date, text });
-        saveLocalNotes();
-        textInput.value = '';
-        dateInput.value = today;
-        refreshNotesList();
+
+        // Сортировка по дате (новые сверху)
+        posts.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+        let html = '';
+        posts.forEach(post => {
+            html += `
+                <div class="post-item">
+                    <div class="post-header">
+                        <span class="post-date">${escapeHtml(post.date)}</span>
+                        <span class="post-user">${escapeHtml(post.user)}</span>
+                    </div>
+                    <div class="post-text">${escapeHtml(post.text)}</div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
     }
 
-    function resetLocalNotes() {
-        if (localNotes.length === 0) return;
-        if (!confirm('Удалить все локальные записи? Данные из основного CSV-досье останутся нетронутыми.')) return;
-        localNotes = [];
-        saveLocalNotes();
-        refreshNotesList();
+    // Загрузка CSV
+    async function loadAndRender() {
+        container.innerHTML = '<div class="loading">⚡ Загрузка записей из архива...</div>';
+        try {
+            const response = await fetch('data.csv');
+            if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
+            const csvText = await response.text();
+            const posts = parseCSV(csvText);
+            renderPosts(posts);
+        } catch (err) {
+            console.error(err);
+            container.innerHTML = `<div class="error-message">⚠️ Не удалось загрузить досье: ${err.message}</div>`;
+        }
     }
 
-    async function refreshNotesList() {
-        const csvNotes = await loadCSVNotes();
-        renderNotes(csvNotes);
-    }
+    // Обработчик кнопки обновления
+    refreshBtn.addEventListener('click', loadAndRender);
 
-    async function init() {
-        loadLocalNotes();
-        await refreshNotesList();
-        addBtn.addEventListener('click', addLocalNote);
-        resetBtn.addEventListener('click', resetLocalNotes);
-        textInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addLocalNote(); });
-    }
-
-    init();
+    // Первоначальная загрузка
+    loadAndRender();
 });
