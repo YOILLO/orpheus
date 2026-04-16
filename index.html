@@ -1,16 +1,130 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="windows-1251"> <!-- Для аутентичности, но можно оставить utf-8 -->
+    <meta charset="windows-1251">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Уголок Исследователя — форум о непознанном</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* === Стиль форума начала 2000-х: просто, угловато, контрастно === */
+        body {
+            font-family: Verdana, Arial, Helvetica, sans-serif;
+            font-size: 12px;
+            margin: 10px;
+            background-color: #E1E1E1;
+            color: #000000;
+        }
+        a:link, a:active, a:visited {
+            color: #0000EE;
+            text-decoration: underline;
+        }
+        a:hover {
+            color: #EE0000;
+            text-decoration: none;
+        }
+        .maintable, .nav, .forumtable {
+            border-collapse: collapse;
+            border: 0;
+        }
+        .header {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px;
+        }
+        .cathead {
+            font-size: 13px;
+            font-weight: bold;
+            padding: 4px;
+        }
+        .post-row {
+            background-color: #F1F1F1;
+        }
+        .post-row-alt {
+            background-color: #E5E5E5;
+        }
+        .post-row:hover {
+            background-color: #FFFFCC;
+        }
+        .folder-icon {
+            width: 32px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .post-content {
+            padding: 6px;
+            vertical-align: top;
+        }
+        .post-title {
+            font-weight: bold;
+            font-size: 13px;
+        }
+        .post-title a {
+            text-decoration: none;
+            color: #0000CC;
+        }
+        .post-title a:hover {
+            text-decoration: underline;
+            color: #CC0000;
+        }
+        .post-text {
+            margin-top: 5px;
+            font-size: 12px;
+            line-height: 1.4;
+            color: #222222;
+        }
+        .post-author {
+            font-weight: bold;
+            color: #003366;
+        }
+        .post-date {
+            font-size: 11px;
+            color: #555555;
+        }
+        .btn {
+            font-family: Verdana, Arial, sans-serif;
+            font-size: 11px;
+            background-color: #D4D0C8;
+            border: 1px solid #003366;
+            padding: 3px 8px;
+            color: #000000;
+            cursor: pointer;
+            outline: 1px solid #F0F0F0;
+            border-style: outset;
+        }
+        .btn:active {
+            border-style: inset;
+            background-color: #C0C0C0;
+        }
+        .btn:disabled {
+            color: #808080;
+            border-color: #808080;
+            background-color: #E0E0E0;
+        }
+        .nav a {
+            font-weight: bold;
+        }
+        .copyright {
+            font-size: 10px;
+            color: #555555;
+            margin-top: 20px;
+        }
+        .copyright a {
+            color: #0000EE;
+        }
+        .loading, .error, .empty {
+            background-color: #F1F1F1;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body bgcolor="#E1E1E1" text="#000000" link="#0000EE" vlink="#551A8B" alink="#EE0000">
+
     <!-- Верхняя плашка как на форумах phpBB -->
     <table width="95%" border="0" cellpadding="4" cellspacing="0" align="center" class="maintable">
         <tr>
-            <td width="100%" bgcolor="#336699" class="header"><font color="#FFFFFF"><b>Уголок Исследователя</b> :: Паранормальные явления, конспирология, наблюдения</font></td>
+            <td width="100%" bgcolor="#336699" class="header">
+                <font color="#FFFFFF"><b>Уголок Исследователя</b> :: Паранормальные явления, конспирология, наблюдения</font>
+            </td>
         </tr>
     </table>
 
@@ -26,21 +140,18 @@
 
     <!-- Основной блок с постами в виде таблицы форума -->
     <table width="95%" border="0" cellpadding="4" cellspacing="1" align="center" bgcolor="#006699" class="forumtable">
-        <!-- Заголовок таблицы -->
         <tr>
             <td colspan="2" bgcolor="#6699CC" class="cathead"><font color="#FFFFFF"><b>📋 ПОСЛЕДНИЕ ЗАПИСИ В ДОСЬЕ</b></font></td>
             <td width="15%" align="center" bgcolor="#6699CC"><font color="#FFFFFF"><b>Автор</b></font></td>
             <td width="15%" align="center" bgcolor="#6699CC"><font color="#FFFFFF"><b>Дата</b></font></td>
         </tr>
 
-        <!-- Сюда будут вставлены строки с постами через JS -->
         <tbody id="posts-table-body">
             <tr>
                 <td colspan="4" align="center" bgcolor="#F1F1F1"><i>Загрузка данных...</i></td>
             </tr>
         </tbody>
 
-        <!-- Нижняя панель с кнопками -->
         <tr>
             <td colspan="4" bgcolor="#D1D7DC" align="right">
                 <input type="button" class="btn" id="refresh-btn" value="⟳ Обновить ленту">
@@ -61,11 +172,14 @@
         </tr>
         <tr>
             <td bgcolor="#E1E1E1" width="50%">
-                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> <b>Модератор:</b> Искатель_Истины<br>
-                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> <b>Тем:</b> <span id="topic-count">0</span> &nbsp;|&nbsp; <b>Сообщений:</b> <span id="post-count">0</span>
+                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> 
+                <b>Модератор:</b> Искатель_Истины<br>
+                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> 
+                <b>Тем:</b> <span id="topic-count">0</span> &nbsp;|&nbsp; <b>Сообщений:</b> <span id="post-count">0</span>
             </td>
             <td bgcolor="#E1E1E1" align="right">
-                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> <b>Сейчас на форуме:</b> 2 гостя, 1 пользователь<br>
+                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> 
+                <b>Сейчас на форуме:</b> 2 гостя, 1 пользователь<br>
                 <a href="#">Охотник_за_НЛО</a> [<a href="#">Выйти</a>]
             </td>
         </tr>
@@ -73,13 +187,111 @@
 
     <br>
 
-    <!-- Копирайт -->
     <div align="center" class="copyright">
         Powered by <a href="#">phpBB</a> &copy; 2001, 2005 phpBB Group<br>
         Русская поддержка <a href="#">phpBB</a><br>
         <font size="1">Запрещено копирование материалов без согласия администрации.</font>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tbody = document.getElementById('posts-table-body');
+            const refreshBtn = document.getElementById('refresh-btn');
+            const topicCountSpan = document.getElementById('topic-count');
+            const postCountSpan = document.getElementById('post-count');
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function parseCSV(csvText) {
+                const lines = csvText.trim().split('\n');
+                if (lines.length < 2) return [];
+
+                const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                const dateIdx = headers.indexOf('date');
+                const userIdx = headers.indexOf('user');
+                const textIdx = headers.indexOf('text');
+
+                if (dateIdx === -1 || userIdx === -1 || textIdx === -1) {
+                    throw new Error('CSV должен содержать колонки date, user, text');
+                }
+
+                const posts = [];
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+
+                    const parts = line.split(',');
+                    let date = parts[dateIdx]?.trim() || '';
+                    let user = parts[userIdx]?.trim() || 'Аноним';
+                    let text = '';
+                    if (parts.length > 3) {
+                        text = parts.slice(textIdx).join(',').trim();
+                    } else {
+                        text = parts[textIdx]?.trim() || '';
+                    }
+
+                    posts.push({ date, user, text });
+                }
+                return posts;
+            }
+
+            function renderPosts(posts) {
+                if (!posts.length) {
+                    tbody.innerHTML = '<tr><td colspan="4" align="center" bgcolor="#F1F1F1" class="empty">📭 В досье пока нет записей.</td></tr>';
+                    if (postCountSpan) postCountSpan.textContent = '0';
+                    if (topicCountSpan) topicCountSpan.textContent = '0';
+                    return;
+                }
+
+                posts.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+                let html = '';
+                posts.forEach((post, index) => {
+                    const rowClass = (index % 2 === 0) ? 'post-row' : 'post-row-alt';
+                    const folderIcon = '📁';
+                    html += `<tr class="${rowClass}">`;
+                    html += `<td class="folder-icon" width="32" align="center" valign="middle" bgcolor="${index%2===0?'#F1F1F1':'#E5E5E5'}">${folderIcon}</td>`;
+                    html += `<td class="post-content" bgcolor="${index%2===0?'#F1F1F1':'#E5E5E5'}">`;
+                    html += `<div class="post-title"><a href="#">${escapeHtml(post.text.substring(0, 50))}${post.text.length>50?'...':''}</a></div>`;
+                    html += `<div class="post-text">${escapeHtml(post.text)}</div>`;
+                    html += `</td>`;
+                    html += `<td align="center" valign="middle" bgcolor="${index%2===0?'#F1F1F1':'#E5E5E5'}" class="post-author">${escapeHtml(post.user)}</td>`;
+                    html += `<td align="center" valign="middle" bgcolor="${index%2===0?'#F1F1F1':'#E5E5E5'}" class="post-date">${escapeHtml(post.date)}</td>`;
+                    html += `</tr>`;
+                });
+
+                tbody.innerHTML = html;
+
+                if (postCountSpan) postCountSpan.textContent = posts.length;
+                if (topicCountSpan) topicCountSpan.textContent = '1';
+            }
+
+            async function loadAndRender() {
+                tbody.innerHTML = '<tr><td colspan="4" align="center" bgcolor="#F1F1F1" class="loading">⚡ Загрузка архива...</td></tr>';
+                try {
+                    const response = await fetch('data.csv');
+                    if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
+                    const csvText = await response.text();
+                    const posts = parseCSV(csvText);
+                    renderPosts(posts);
+                } catch (err) {
+                    console.error(err);
+                    tbody.innerHTML = `<tr><td colspan="4" align="center" bgcolor="#F1F1F1" class="error">⚠️ Ошибка загрузки: ${err.message}</td></tr>`;
+                    if (postCountSpan) postCountSpan.textContent = '0';
+                    if (topicCountSpan) topicCountSpan.textContent = '0';
+                }
+            }
+
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', loadAndRender);
+            }
+
+            loadAndRender();
+        });
+    </script>
 </body>
 </html>
