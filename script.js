@@ -2,19 +2,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('posts-container');
     const refreshBtn = document.getElementById('refresh-btn');
 
-    // Функция безопасного экранирования
+    // Безопасное экранирование HTML
     function escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
 
-    // Парсинг CSV с учетом возможных запятых внутри полей (простой подход)
+    // Парсинг CSV с учётом возможных запятых в поле text
     function parseCSV(csvText) {
         const lines = csvText.trim().split('\n');
         if (lines.length < 2) return [];
 
-        // Заголовки
         const headers = lines[0].split(',').map(h => h.trim());
         const dateIdx = headers.indexOf('date');
         const userIdx = headers.indexOf('user');
@@ -29,17 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const line = lines[i].trim();
             if (!line) continue;
 
-            // Упрощённый сплит: если в тексте есть запятые, это сломает парсинг,
-            // но для демонстрации оставим так (можно улучшить через регулярки или библиотеку)
+            // Разбиваем, но учитываем, что текст может содержать запятые
             const parts = line.split(',');
-            // Восстановим текст, если он содержал запятые (предполагаем, что только текст может содержать запятые)
             let date = parts[dateIdx]?.trim() || '';
             let user = parts[userIdx]?.trim() || 'Аноним';
-            // Текст — всё, что после первых двух колонок (если колонок >3)
             let text = '';
             if (parts.length > 3) {
-                // Собираем оставшиеся части в одну строку через запятую
-                text = parts.slice(2).join(',').trim();
+                text = parts.slice(textIdx).join(',').trim();
             } else {
                 text = parts[textIdx]?.trim() || '';
             }
@@ -74,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         container.innerHTML = html;
     }
 
-    // Загрузка CSV
+    // Загрузка CSV и отображение
     async function loadAndRender() {
         container.innerHTML = '<div class="loading">⚡ Загрузка записей из архива...</div>';
         try {
@@ -90,7 +85,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Обработчик кнопки обновления
-    refreshBtn.addEventListener('click', loadAndRender);
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', loadAndRender);
+    }
 
     // Первоначальная загрузка
     loadAndRender();
