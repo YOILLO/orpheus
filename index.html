@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Уголок Исследователя | Архив X</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Шрифт для печатной машинки -->
+    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Декоративный шум -->
+        <div class="noise"></div>
+        
+        <main class="dossier-panel">
+            <header class="header">
+                <h1 class="title">📡 УГОЛОК ИССЛЕДОВАТЕЛЯ</h1>
+                <div class="subtitle">
+                    <span class="line"></span>
+                    <span class="text">Полевые заметки • Аномалии • Конспирология</span>
+                    <span class="line"></span>
+                </div>
+                <div class="status-bar">
+                    <span>СЕКРЕТНО / ТОЛЬКО ДЛЯ ПОСВЯЩЁННЫХ</span>
+                    <span class="blink">● ЗАПИСЬ ВКЛ</span>
+                </div>
+            </header>
+
+            <section class="entries-section">
+                <div class="section-header">
+                    <h2>📋 АРХИВ НАБЛЮДЕНИЙ</h2>
+                    <span class="badge" id="entry-count">0</span>
+                </div>
+                <div id="notes-list" class="notes-list"></div>
+            </section>
+
+            <section class="add-section">
+                <h3>✚ НОВАЯ ЗАПИСЬ В ДОСЬЕ</h3>
+                <div class="add-form">
+                    <div class="input-group">
+                        <label for="note-date">ДАТА ИНЦИДЕНТА</label>
+                        <input type="date" id="note-date" value="">
+                    </div>
+                    <div class="input-group">
+                        <label for="note-text">ОПИСАНИЕ / ТЕОРИЯ</label>
+                        <input type="text" id="note-text" placeholder="Что вы видели? Кто за этим стоит?">
+                    </div>
+                    <div class="form-actions">
+                        <button id="add-btn" class="btn btn-primary">🕵️ ЗАФИКСИРОВАТЬ</button>
+                        <button id="reset-btn" class="btn btn-secondary">🗑️ СТЕРЕТЬ ЛОКАЛЬНОЕ</button>
+                    </div>
+                </div>
+                <p class="footnote">Данные из CSV (базовое досье) + ваши личные заметки (только в этом браузере).</p>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
