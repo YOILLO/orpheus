@@ -13,13 +13,12 @@
         }
         a:link, a:visited { color: #0000EE; text-decoration: underline; }
         a:hover { color: #EE0000; text-decoration: none; }
-    
+
         .forum-wrapper {
             width: 95%;
             margin: 0 auto;
         }
-    
-        /* Общая таблица темы (заголовок и информация) */
+
         .topic-header {
             width: 100%;
             border-collapse: collapse;
@@ -37,44 +36,43 @@
             border-bottom: 1px solid #6699CC;
             padding: 5px;
         }
-    
-        /* Каждый пост — отдельная таблица с рамкой */
+
         .post-table {
             width: 100%;
             border-collapse: collapse;
             border: 2px solid #5A7A9A;
             margin-bottom: 5px;
             background-color: #FFFFFF;
-            table-layout: fixed;  /* важно для фиксированной ширины колонок */
+            table-layout: fixed;
         }
-    
+
         .post-profile {
-            width: 160px;          /* фиксированная ширина */
+            width: 160px;
             vertical-align: top;
             padding: 8px;
             background-color: #F4F7FB;
-            word-break: break-word; /* перенос длинных слов */
+            word-break: break-word;
             border-right: 1px solid #B0C4DE;
         }
-    
+
         .username {
             font-weight: bold;
             font-size: 13px;
             color: #003366;
         }
-    
+
         .user-status {
             font-size: 10px;
             color: #2F4F4F;
             margin-top: 3px;
         }
-    
+
         .post-message {
             vertical-align: top;
             padding: 8px;
             word-break: break-word;
         }
-    
+
         .post-header {
             border-bottom: 1px solid #B0C4DE;
             padding-bottom: 4px;
@@ -82,16 +80,17 @@
             font-size: 11px;
             color: #444;
         }
-    
+
         .post-date {
             float: right;
         }
-    
+
         .post-content {
             font-size: 13px;
             line-height: 1.5;
+            margin-bottom: 8px;
         }
-    
+
         .btn {
             font-family: Verdana, Arial, sans-serif;
             font-size: 11px;
@@ -106,24 +105,24 @@
             border-style: inset;
             background-color: #C0C0C0;
         }
-    
+
         .nav-links {
             width: 95%;
             margin: 5px auto;
             font-size: 11px;
         }
-    
+
         .loading, .error, .empty {
             padding: 20px;
             text-align: center;
             background-color: #F1F1F1;
             border: 1px solid #999;
         }
-    
+
         #single-post-view {
             display: none;
         }
-    
+
         .footer {
             width: 95%;
             margin: 15px auto;
@@ -159,7 +158,6 @@
     </table>
 
     <div id="posts-container">
-        <!-- Сообщения будут вставлены сюда как отдельные таблицы -->
         <div class="loading">⚡ Загрузка сообщений...</div>
     </div>
 </div>
@@ -193,10 +191,20 @@
 
     let allPosts = [];
 
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
+    // Преобразование BB-кода [url=...]текст[/url] в HTML-ссылку
+    function parseBBCode(text) {
+        // Экранируем HTML, кроме сгенерированных ссылок
+        let escaped = text.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+        // Заменяем [url=...]текст[/url] на <a href="...">текст</a>
+        escaped = escaped.replace(/\[url=([^\]]+)\](.*?)\[\/url\]/gi, function(match, url, linkText) {
+            return `<a href="${url}" target="_blank">${linkText}</a>`;
+        });
+        return escaped;
     }
 
     function generateSlug(text) {
@@ -268,6 +276,8 @@
 
     function renderPostAsTable(post, index) {
         const singleLink = `#/post/${post.slug || post.id}`;
+        const parsedText = parseBBCode(post.text);
+
         return `
             <table class="post-table">
                 <tr>
@@ -281,7 +291,7 @@
                             <span class="post-date">${escapeHtml(post.date)}</span>
                             <a href="${singleLink}" style="margin-left:8px; font-size:10px;">🔗</a>
                         </div>
-                        <div class="post-content">${escapeHtml(post.text)}</div>
+                        <div class="post-content">${parsedText}</div>
                     </td>
                 </tr>
             </table>
@@ -289,6 +299,7 @@
     }
 
     function renderSinglePostAsTable(post) {
+        const parsedText = parseBBCode(post.text);
         return `
             <table class="post-table">
                 <tr>
@@ -301,11 +312,17 @@
                             <span>Сообщение</span>
                             <span class="post-date">${escapeHtml(post.date)}</span>
                         </div>
-                        <div class="post-content">${escapeHtml(post.text)}</div>
+                        <div class="post-content">${parsedText}</div>
                     </td>
                 </tr>
             </table>
         `;
+    }
+
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     function renderAllPosts(posts) {
