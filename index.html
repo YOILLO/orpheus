@@ -14,14 +14,17 @@
         a:link, a:visited { color: #0000EE; text-decoration: underline; }
         a:hover { color: #EE0000; text-decoration: none; }
 
-        .forum-table {
+        .forum-wrapper {
             width: 95%;
             margin: 0 auto;
-            border-collapse: separate;
-            border-spacing: 0 5px;
-            background: transparent;
         }
 
+        /* Общая таблица темы (заголовок и информация) */
+        .topic-header {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 5px;
+        }
         .header-bar {
             background-color: #336699;
             color: #FFFFFF;
@@ -29,10 +32,18 @@
             padding: 6px 8px;
             font-size: 14px;
         }
+        .info-bar {
+            background: #EAF0F6;
+            border-bottom: 1px solid #6699CC;
+            padding: 5px;
+        }
 
-        /* Рамка вокруг каждого поста */
-        .post-row td {
+        /* Каждый пост — отдельная таблица с рамкой */
+        .post-table {
+            width: 100%;
+            border-collapse: collapse;
             border: 2px solid #5A7A9A;
+            margin-bottom: 5px;
             background-color: #FFFFFF;
         }
 
@@ -40,6 +51,7 @@
             width: 140px;
             vertical-align: top;
             padding: 8px;
+            border-right: 1px solid #B0C4DE;
         }
 
         .username {
@@ -101,17 +113,19 @@
             padding: 20px;
             text-align: center;
             background-color: #F1F1F1;
+            border: 1px solid #999;
         }
 
         #single-post-view {
             display: none;
         }
 
-        /* Ячейки верхней информационной панели остаются без рамки */
-        .forum-table tr:first-child td,
-        .forum-table tr:nth-child(2) td {
-            border: none;
-            background: transparent;
+        .footer {
+            width: 95%;
+            margin: 15px auto;
+            text-align: center;
+            font-size: 10px;
+            color: #555;
         }
     </style>
 </head>
@@ -123,46 +137,42 @@
     <b>Тема: Хроники необъяснимого</b>
 </div>
 
-<div id="posts-list-view">
-    <table class="forum-table" cellspacing="0">
+<div id="posts-list-view" class="forum-wrapper">
+    <table class="topic-header">
         <tr>
-            <td colspan="2" class="header-bar">
+            <td class="header-bar">
                 📡 Уголок Исследователя :: Хроники необъяснимого
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="padding:5px; background:#EAF0F6; border-bottom:1px solid #6699CC;">
+            <td class="info-bar">
                 <b>Сообщений в теме:</b> <span id="post-count">0</span>
                 <span style="float:right;">
                     <input type="button" class="btn" id="refresh-btn" value="⟳ Обновить">
                 </span>
             </td>
         </tr>
-
-        <tbody id="posts-container">
-            <tr><td colspan="2" class="loading">⚡ Загрузка сообщений...</td></tr>
-        </tbody>
     </table>
+
+    <div id="posts-container">
+        <!-- Сообщения будут вставлены сюда как отдельные таблицы -->
+        <div class="loading">⚡ Загрузка сообщений...</div>
+    </div>
 </div>
 
-<div id="single-post-view">
-    <div class="nav-links">
+<div id="single-post-view" class="forum-wrapper">
+    <div class="nav-links" style="width:100%; margin:5px 0;">
         <a href="#">Главная форума</a> &raquo; 
         <a href="#" id="back-to-topic-link">Хроники необъяснимого</a> &raquo; 
         <b>Просмотр сообщения</b>
     </div>
-    <table class="forum-table" cellspacing="0">
-        <tr><td class="header-bar" colspan="2">📄 Сообщение</td></tr>
-        <tbody id="single-post-content"></tbody>
-        <tr>
-            <td colspan="2" style="padding:8px; background:#D1D7DC;">
-                <input type="button" class="btn" id="back-to-list-btn" value="← Вернуться к теме">
-            </td>
-        </tr>
-    </table>
+    <div id="single-post-container"></div>
+    <div style="margin-top:10px;">
+        <input type="button" class="btn" id="back-to-list-btn" value="← Вернуться к теме">
+    </div>
 </div>
 
-<div style="width:95%; margin:15px auto; text-align:center; font-size:10px; color:#555;">
+<div class="footer">
     Powered by <a href="#">phpBB</a> &copy; 2001, 2005
 </div>
 
@@ -175,7 +185,7 @@
     const backBtn = document.getElementById('back-to-list-btn');
     const backToTopicLink = document.getElementById('back-to-topic-link');
     const refreshBtn = document.getElementById('refresh-btn');
-    const singlePostContent = document.getElementById('single-post-content');
+    const singlePostContainer = document.getElementById('single-post-container');
 
     let allPosts = [];
 
@@ -252,53 +262,57 @@
         return posts;
     }
 
-    function renderPostRow(post, index) {
+    function renderPostAsTable(post, index) {
         const singleLink = `#/post/${post.slug || post.id}`;
         return `
-            <tr class="post-row">
-                <td class="post-profile">
-                    <div class="username">${escapeHtml(post.user)}</div>
-                    <div class="user-status">Исследователь</div>
-                </td>
-                <td class="post-message">
-                    <div class="post-header">
-                        <span>#${index+1}</span>
-                        <span class="post-date">${escapeHtml(post.date)}</span>
-                        <a href="${singleLink}" style="margin-left:8px; font-size:10px;">🔗</a>
-                    </div>
-                    <div class="post-content">${escapeHtml(post.text)}</div>
-                </td>
-            </tr>
+            <table class="post-table">
+                <tr>
+                    <td class="post-profile">
+                        <div class="username">${escapeHtml(post.user)}</div>
+                        <div class="user-status">Исследователь</div>
+                    </td>
+                    <td class="post-message">
+                        <div class="post-header">
+                            <span>#${index+1}</span>
+                            <span class="post-date">${escapeHtml(post.date)}</span>
+                            <a href="${singleLink}" style="margin-left:8px; font-size:10px;">🔗</a>
+                        </div>
+                        <div class="post-content">${escapeHtml(post.text)}</div>
+                    </td>
+                </tr>
+            </table>
         `;
     }
 
-    function renderSinglePost(post) {
+    function renderSinglePostAsTable(post) {
         return `
-            <tr class="post-row">
-                <td class="post-profile">
-                    <div class="username">${escapeHtml(post.user)}</div>
-                    <div class="user-status">Исследователь</div>
-                </td>
-                <td class="post-message">
-                    <div class="post-header">
-                        <span>Сообщение</span>
-                        <span class="post-date">${escapeHtml(post.date)}</span>
-                    </div>
-                    <div class="post-content">${escapeHtml(post.text)}</div>
-                </td>
-            </tr>
+            <table class="post-table">
+                <tr>
+                    <td class="post-profile">
+                        <div class="username">${escapeHtml(post.user)}</div>
+                        <div class="user-status">Исследователь</div>
+                    </td>
+                    <td class="post-message">
+                        <div class="post-header">
+                            <span>Сообщение</span>
+                            <span class="post-date">${escapeHtml(post.date)}</span>
+                        </div>
+                        <div class="post-content">${escapeHtml(post.text)}</div>
+                    </td>
+                </tr>
+            </table>
         `;
     }
 
     function renderAllPosts(posts) {
         if (!posts.length) {
-            postsContainer.innerHTML = '<tr><td colspan="2" class="empty">📭 В теме пока нет сообщений.</td></tr>';
+            postsContainer.innerHTML = '<div class="empty">📭 В теме пока нет сообщений.</div>';
             postCountSpan.textContent = '0';
             return;
         }
         const sorted = [...posts].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
         let html = '';
-        sorted.forEach((post, idx) => { html += renderPostRow(post, idx); });
+        sorted.forEach((post, idx) => { html += renderPostAsTable(post, idx); });
         postsContainer.innerHTML = html;
         postCountSpan.textContent = sorted.length;
     }
@@ -313,7 +327,7 @@
 
     function showSinglePost(post) {
         if (!post) return;
-        singlePostContent.innerHTML = renderSinglePost(post);
+        singlePostContainer.innerHTML = renderSinglePostAsTable(post);
         listView.style.display = 'none';
         singleView.style.display = 'block';
     }
@@ -335,7 +349,7 @@
     }
 
     async function loadAndRender() {
-        postsContainer.innerHTML = '<tr><td colspan="2" class="loading">⚡ Загрузка архива...</td></tr>';
+        postsContainer.innerHTML = '<div class="loading">⚡ Загрузка архива...</div>';
         try {
             const response = await fetch('data.csv');
             if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
@@ -345,7 +359,7 @@
             handleHash();
         } catch (err) {
             console.error(err);
-            postsContainer.innerHTML = `<tr><td colspan="2" class="error">⚠️ Ошибка загрузки: ${err.message}</td></tr>`;
+            postsContainer.innerHTML = `<div class="error">⚠️ Ошибка загрузки: ${err.message}</div>`;
             postCountSpan.textContent = '0';
         }
     }
