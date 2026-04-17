@@ -17,9 +17,9 @@
         .forum-table {
             width: 95%;
             margin: 0 auto;
-            border-collapse: collapse;
-            border: 1px solid #006699;
-            background-color: #FFFFFF;
+            border-collapse: separate;
+            border-spacing: 0 5px;
+            background: transparent;
         }
 
         .header-bar {
@@ -30,12 +30,16 @@
             font-size: 14px;
         }
 
+        /* Рамка вокруг каждого поста */
+        .post-row td {
+            border: 2px solid #5A7A9A;
+            background-color: #FFFFFF;
+        }
+
         .post-profile {
             width: 140px;
             vertical-align: top;
             padding: 8px;
-            border-right: 1px solid #B0C4DE;
-            background-color: #F4F7FB;
         }
 
         .username {
@@ -52,7 +56,6 @@
         .post-message {
             vertical-align: top;
             padding: 8px;
-            background-color: #FFFFFF;
         }
 
         .post-header {
@@ -102,6 +105,13 @@
 
         #single-post-view {
             display: none;
+        }
+
+        /* Ячейки верхней информационной панели остаются без рамки */
+        .forum-table tr:first-child td,
+        .forum-table tr:nth-child(2) td {
+            border: none;
+            background: transparent;
         }
     </style>
 </head>
@@ -153,7 +163,7 @@
 </div>
 
 <div style="width:95%; margin:15px auto; text-align:center; font-size:10px; color:#555;">
-    Powered by <a href="#">phpBB</a> &copy; 1997, 2002
+    Powered by <a href="#">phpBB</a> &copy; 2001, 2005
 </div>
 
 <script>
@@ -245,7 +255,7 @@
     function renderPostRow(post, index) {
         const singleLink = `#/post/${post.slug || post.id}`;
         return `
-            <tr>
+            <tr class="post-row">
                 <td class="post-profile">
                     <div class="username">${escapeHtml(post.user)}</div>
                     <div class="user-status">Исследователь</div>
@@ -264,7 +274,7 @@
 
     function renderSinglePost(post) {
         return `
-            <tr>
+            <tr class="post-row">
                 <td class="post-profile">
                     <div class="username">${escapeHtml(post.user)}</div>
                     <div class="user-status">Исследователь</div>
