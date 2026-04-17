@@ -2,83 +2,125 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Уголок Исследователя — форум о непознанном</title>
+    <title>Уголок Исследователя — Паранормальные явления (тема)</title>
     <style>
-        /* === Стиль форума начала 2000-х === */
+        /* === ПРОСТОЙ ФОРУМНЫЙ СТИЛЬ НАЧАЛА 2000-Х === */
         body {
             font-family: Verdana, Arial, Helvetica, sans-serif;
             font-size: 12px;
             margin: 10px;
-            background-color: #E1E1E1;
+            background-color: #D1D7DC;
             color: #000000;
         }
-        a:link, a:active, a:visited {
-            color: #0000EE;
-            text-decoration: underline;
-        }
-        a:hover {
-            color: #EE0000;
-            text-decoration: none;
-        }
-        .maintable, .nav, .forumtable {
+        a:link, a:visited { color: #0000EE; text-decoration: underline; }
+        a:hover { color: #EE0000; text-decoration: none; }
+
+        /* Основная таблица форума */
+        .forum-table {
+            width: 95%;
+            margin: 0 auto;
             border-collapse: collapse;
-            border: 0;
+            border: 1px solid #006699;
+            background-color: #FFFFFF;
         }
-        .header {
+
+        /* Заголовки */
+        .header-bar {
+            background-color: #336699;
+            color: #FFFFFF;
+            font-weight: bold;
+            padding: 6px 8px;
             font-size: 14px;
-            font-weight: bold;
-            padding: 5px;
         }
-        .cathead {
-            font-size: 13px;
+        .cat-bar {
+            background-color: #6699CC;
+            color: #FFFFFF;
             font-weight: bold;
-            padding: 4px;
+            padding: 4px 8px;
+            font-size: 12px;
         }
+
+        /* Строки сообщений */
         .post-row {
             background-color: #F1F1F1;
         }
         .post-row-alt {
             background-color: #E5E5E5;
         }
-        .post-row:hover {
-            background-color: #FFFFCC;
-        }
-        .folder-icon {
-            width: 32px;
-            text-align: center;
-            vertical-align: middle;
-        }
-        .post-content {
-            padding: 6px;
+
+        /* Левая колонка с профилем */
+        .post-profile {
+            width: 180px;
             vertical-align: top;
+            padding: 8px;
+            border-right: 1px solid #B0C4DE;
+            background-color: inherit;
         }
-        .post-title {
+        .avatar-placeholder {
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        .avatar-img {
+            border: 1px solid #7A8A9E;
+            background-color: #EAEAEA;
+            padding: 10px 5px;
+            font-size: 10px;
+            color: #555;
+        }
+        .username {
             font-weight: bold;
             font-size: 13px;
-        }
-        .post-title a {
-            text-decoration: none;
-            color: #0000CC;
-        }
-        .post-title a:hover {
-            text-decoration: underline;
-            color: #CC0000;
-        }
-        .post-text {
-            margin-top: 5px;
-            font-size: 12px;
-            line-height: 1.4;
-            color: #222222;
-        }
-        .post-author {
-            font-weight: bold;
             color: #003366;
+            text-align: center;
+            margin: 5px 0;
+        }
+        .user-title {
+            text-align: center;
+            font-size: 10px;
+            color: #2F4F4F;
+            margin: 3px 0;
+        }
+        .user-info {
+            font-size: 10px;
+            margin-top: 8px;
+            border-top: 1px dotted #999;
+            padding-top: 5px;
+        }
+        .user-info div {
+            margin: 2px 0;
+        }
+
+        /* Правая колонка с сообщением */
+        .post-message {
+            vertical-align: top;
+            padding: 8px;
+        }
+        .post-header {
+            border-bottom: 1px solid #B0C4DE;
+            padding-bottom: 4px;
+            margin-bottom: 8px;
+            font-size: 11px;
+            color: #444;
         }
         .post-date {
-            font-size: 11px;
-            color: #555555;
+            float: right;
         }
+        .post-content {
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            word-break: break-word;
+        }
+        .post-signature {
+            margin-top: 15px;
+            padding-top: 5px;
+            border-top: 1px dashed #B0C4DE;
+            font-size: 10px;
+            color: #555;
+            font-style: italic;
+        }
+
+        /* Кнопки в стиле Windows Classic */
         .btn {
             font-family: Verdana, Arial, sans-serif;
             font-size: 11px;
@@ -99,394 +141,388 @@
             border-color: #808080;
             background-color: #E0E0E0;
         }
-        .nav a {
-            font-weight: bold;
-        }
-        .copyright {
-            font-size: 10px;
-            color: #555555;
-            margin-top: 20px;
-        }
-        .copyright a {
-            color: #0000EE;
-        }
-        .loading, .error, .empty {
-            background-color: #F1F1F1;
-            padding: 10px;
-            text-align: center;
-        }
-        /* Страница отдельного поста */
-        .single-post {
-            background-color: #F1F1F1;
-            border: 1px solid #006699;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        .single-post-header {
-            background-color: #6699CC;
-            color: white;
-            padding: 5px 10px;
-            font-weight: bold;
-            margin: -15px -15px 10px -15px;
-        }
-        .single-post-meta {
+
+        /* Навигация */
+        .nav-links {
+            width: 95%;
+            margin: 5px auto;
             font-size: 11px;
-            color: #555;
-            margin-bottom: 15px;
-            border-bottom: 1px dotted #999;
-            padding-bottom: 8px;
         }
-        .single-post-text {
-            font-size: 13px;
-            line-height: 1.5;
-            margin: 15px 0;
+
+        /* Сообщения о загрузке/ошибках */
+        .loading, .error, .empty {
+            padding: 20px;
+            text-align: center;
+            background-color: #F1F1F1;
         }
-        .back-link {
-            margin-top: 20px;
+
+        /* Ссылка на отдельный пост */
+        .post-link {
+            font-size: 10px;
+            margin-left: 10px;
         }
+
+        /* Страница одного поста (скрыта по умолчанию) */
         #single-post-view {
             display: none;
         }
         #posts-list-view {
             display: block;
         }
+        .single-post-container {
+            width: 95%;
+            margin: 0 auto;
+        }
     </style>
 </head>
-<body bgcolor="#E1E1E1" text="#000000" link="#0000EE" vlink="#551A8B" alink="#EE0000">
+<body>
 
-    <!-- Верхняя плашка -->
-    <table width="95%" border="0" cellpadding="4" cellspacing="0" align="center" class="maintable">
+<!-- Навигационная цепочка -->
+<div class="nav-links">
+    <a href="#">Главная форума</a> &raquo; 
+    <a href="#">Дневники наблюдений</a> &raquo; 
+    <b>Тема: Хроники необъяснимого (архив наблюдений)</b>
+</div>
+
+<!-- Основной вид: лента сообщений темы -->
+<div id="posts-list-view">
+    <table class="forum-table" cellspacing="0" cellpadding="0">
+        <!-- Заголовок темы -->
         <tr>
-            <td width="100%" bgcolor="#336699" class="header">
-                <font color="#FFFFFF"><b>Уголок Исследователя</b> :: Паранормальные явления, конспирология, наблюдения</font>
+            <td colspan="2" class="header-bar">
+                📡 Уголок Исследователя :: Хроники необъяснимого
+            </td>
+        </tr>
+        <!-- Информация о теме -->
+        <tr>
+            <td colspan="2" style="padding:5px; background:#EAF0F6; border-bottom:1px solid #6699CC;">
+                <b>Автор темы:</b> Искатель_Истины &nbsp;|&nbsp; 
+                <b>Сообщений:</b> <span id="post-count">0</span> &nbsp;|&nbsp;
+                <b>Просмотров:</b> 1337
+                <span style="float:right;">
+                    <input type="button" class="btn" id="refresh-btn" value="⟳ Обновить">
+                    <input type="button" class="btn" value="📝 Ответить" disabled>
+                </span>
+            </td>
+        </tr>
+
+        <!-- Сюда будут вставлены сообщения -->
+        <tbody id="posts-container">
+            <tr><td colspan="2" class="loading">⚡ Загрузка сообщений...</td></tr>
+        </tbody>
+
+        <!-- Нижняя панель -->
+        <tr>
+            <td colspan="2" style="padding:5px; background:#D1D7DC; text-align:right;">
+                <input type="button" class="btn" value="📌 Новая тема" disabled>
+                <input type="button" class="btn" value="🔒 Закрыто" disabled>
             </td>
         </tr>
     </table>
+</div>
 
-    <!-- Навигация -->
-    <table width="95%" border="0" cellpadding="2" cellspacing="0" align="center" class="nav">
-        <tr>
-            <td><a href="#">Главная</a> &raquo; <a href="#">Дневники наблюдений</a> &raquo; <b><span id="nav-title">Архив записей</span></b></td>
-            <td align="right"><a href="#">Регистрация</a> | <a href="#">Вход</a></td>
-        </tr>
-    </table>
-
-    <br>
-
-    <!-- Основной контейнер: лента записей -->
-    <div id="posts-list-view">
-        <table width="95%" border="0" cellpadding="4" cellspacing="1" align="center" bgcolor="#006699" class="forumtable">
-            <tr>
-                <td colspan="2" bgcolor="#6699CC" class="cathead"><font color="#FFFFFF"><b>📋 ПОСЛЕДНИЕ ЗАПИСИ В ДОСЬЕ</b></font></td>
-                <td width="15%" align="center" bgcolor="#6699CC"><font color="#FFFFFF"><b>Автор</b></font></td>
-                <td width="15%" align="center" bgcolor="#6699CC"><font color="#FFFFFF"><b>Дата</b></font></td>
-            </tr>
-
-            <tbody id="posts-table-body">
-                <tr><td colspan="4" align="center" bgcolor="#F1F1F1"><i>Загрузка данных...</i></td></tr>
-            </tbody>
-
-            <tr>
-                <td colspan="4" bgcolor="#D1D7DC" align="right">
-                    <input type="button" class="btn" id="refresh-btn" value="⟳ Обновить ленту">
-                    &nbsp;
-                    <input type="button" class="btn" value="📌 Новая тема" disabled>
-                    &nbsp;
-                    <input type="button" class="btn" value="🔒 Ответить" disabled>
-                </td>
-            </tr>
-        </table>
+<!-- Вид отдельного сообщения (скрыт) -->
+<div id="single-post-view">
+    <div class="nav-links">
+        <a href="#">Главная форума</a> &raquo; 
+        <a href="#" id="back-to-topic-link">Хроники необъяснимого</a> &raquo; 
+        <b>Просмотр сообщения</b>
     </div>
-
-    <!-- Контейнер для просмотра отдельного поста (скрыт по умолчанию) -->
-    <div id="single-post-view">
-        <table width="95%" border="0" cellpadding="4" cellspacing="1" align="center" bgcolor="#006699">
-            <tr>
-                <td bgcolor="#6699CC" class="cathead"><font color="#FFFFFF"><b>📄 ПРОСМОТР ЗАПИСИ</b></font></td>
-            </tr>
-            <tr>
-                <td bgcolor="#F1F1F1" class="single-post">
-                    <div class="single-post-header" id="single-title">Заголовок</div>
-                    <div class="single-post-meta">
-                        <span id="single-author">Автор</span> | 
-                        <span id="single-date">Дата</span>
-                    </div>
-                    <div class="single-post-text" id="single-text">
-                        Текст записи...
-                    </div>
-                    <div class="back-link">
-                        <input type="button" class="btn" id="back-to-list-btn" value="← Назад к списку">
-                    </div>
-                </td>
-            </tr>
-        </table>
-    </div>
-
-    <br>
-
-    <!-- Информация о разделе -->
-    <table width="95%" border="0" cellpadding="4" cellspacing="1" align="center" bgcolor="#006699">
-        <tr>
-            <td bgcolor="#6699CC" colspan="2"><font color="#FFFFFF"><b>Информация о разделе</b></font></td>
+    <table class="forum-table single-post-container" cellspacing="0">
+        <tr><td class="header-bar" colspan="2">📄 Сообщение</td></tr>
+        <tr id="single-post-content">
+            <!-- сюда динамически вставится пост -->
         </tr>
         <tr>
-            <td bgcolor="#E1E1E1" width="50%">
-                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> 
-                <b>Модератор:</b> Искатель_Истины<br>
-                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> 
-                <b>Тем:</b> <span id="topic-count">0</span> &nbsp;|&nbsp; <b>Сообщений:</b> <span id="post-count">0</span>
-            </td>
-            <td bgcolor="#E1E1E1" align="right">
-                <img src="data:image/gif;base64,R0lGODlhEAAQAIABAP8AAP///yH5BAEAAAEALAAAAAAQABAAAAIOjI+py+0Po5y02ouzPgUAOw==" width="16" height="16" alt=""> 
-                <b>Сейчас на форуме:</b> 2 гостя, 1 пользователь<br>
-                <a href="#">Охотник_за_НЛО</a> [<a href="#">Выйти</a>]
+            <td colspan="2" style="padding:8px; background:#D1D7DC;">
+                <input type="button" class="btn" id="back-to-list-btn" value="← Вернуться к теме">
             </td>
         </tr>
     </table>
+</div>
 
-    <br>
+<!-- Подвал -->
+<div style="width:95%; margin:15px auto; text-align:center; font-size:10px; color:#555;">
+    Powered by <a href="#">phpBB</a> &copy; 2001, 2005 phpBB Group<br>
+    Время генерации страницы: 0.042 сек.
+</div>
 
-    <div align="center" class="copyright">
-        Powered by <a href="#">phpBB</a> &copy; 2001, 2005 phpBB Group<br>
-        Русская поддержка <a href="#">phpBB</a><br>
-        <font size="1">Запрещено копирование материалов без согласия администрации.</font>
-    </div>
+<script>
+(function() {
+    // DOM элементы
+    const postsContainer = document.getElementById('posts-container');
+    const postCountSpan = document.getElementById('post-count');
+    const listView = document.getElementById('posts-list-view');
+    const singleView = document.getElementById('single-post-view');
+    const backBtn = document.getElementById('back-to-list-btn');
+    const backToTopicLink = document.getElementById('back-to-topic-link');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const singlePostContent = document.getElementById('single-post-content');
 
-    <script>
-        (function() {
-            // DOM элементы
-            const tbody = document.getElementById('posts-table-body');
-            const refreshBtn = document.getElementById('refresh-btn');
-            const topicCountSpan = document.getElementById('topic-count');
-            const postCountSpan = document.getElementById('post-count');
-            const listView = document.getElementById('posts-list-view');
-            const singleView = document.getElementById('single-post-view');
-            const backBtn = document.getElementById('back-to-list-btn');
-            const navTitle = document.getElementById('nav-title');
+    // Глобальное хранилище постов
+    let allPosts = [];
 
-            // Элементы страницы поста
-            const singleTitle = document.getElementById('single-title');
-            const singleAuthor = document.getElementById('single-author');
-            const singleDate = document.getElementById('single-date');
-            const singleText = document.getElementById('single-text');
+    // Экранирование HTML
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
 
-            // Глобальное хранилище постов
-            let allPosts = [];
+    // Генерация slug из текста
+    function generateSlug(text) {
+        return text.toLowerCase()
+            .replace(/[^а-яa-z0-9\s]/g, '')
+            .trim()
+            .replace(/\s+/g, '-')
+            .substring(0, 50);
+    }
 
-            // Экранирование HTML
-            function escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
-
-            // Генерация slug из текста (если нет в CSV)
-            function generateSlug(text) {
-                return text.toLowerCase()
-                    .replace(/[^а-яa-z0-9\s]/g, '')
-                    .trim()
-                    .replace(/\s+/g, '-')
-                    .substring(0, 50);
-            }
-
-            // Надёжный парсер строки CSV с учётом кавычек и запятых внутри полей
-            function parseCSVLine(line) {
-                const result = [];
-                let current = '';
-                let inQuotes = false;
-                
-                for (let i = 0; i < line.length; i++) {
-                    const char = line[i];
-                    const nextChar = line[i + 1];
-                    
-                    if (char === '"' && !inQuotes) {
-                        inQuotes = true;
-                    } else if (char === '"' && inQuotes && nextChar === '"') {
-                        // Экранированная кавычка ""
-                        current += '"';
-                        i++; // пропускаем следующую кавычку
-                    } else if (char === '"' && inQuotes) {
-                        inQuotes = false;
-                    } else if (char === ',' && !inQuotes) {
-                        result.push(current);
-                        current = '';
-                    } else {
-                        current += char;
-                    }
-                }
+    // Надёжный парсер строки CSV с учётом кавычек
+    function parseCSVLine(line) {
+        const result = [];
+        let current = '';
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+            const char = line[i];
+            const nextChar = line[i + 1];
+            if (char === '"' && !inQuotes) {
+                inQuotes = true;
+            } else if (char === '"' && inQuotes && nextChar === '"') {
+                current += '"';
+                i++;
+            } else if (char === '"' && inQuotes) {
+                inQuotes = false;
+            } else if (char === ',' && !inQuotes) {
                 result.push(current);
-                return result;
+                current = '';
+            } else {
+                current += char;
             }
+        }
+        result.push(current);
+        return result;
+    }
 
-            // Парсинг всего CSV с использованием parseCSVLine
-            function parseCSV(csvText) {
-                const lines = csvText.trim().split('\n');
-                if (lines.length < 2) return [];
+    // Парсинг всего CSV
+    function parseCSV(csvText) {
+        const lines = csvText.trim().split('\n');
+        if (lines.length < 2) return [];
 
-                // Заголовки
-                const headers = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase());
-                const dateIdx = headers.indexOf('date');
-                const userIdx = headers.indexOf('user');
-                const textIdx = headers.indexOf('text');
-                const slugIdx = headers.indexOf('slug');
+        const headers = parseCSVLine(lines[0]).map(h => h.trim().toLowerCase());
+        const dateIdx = headers.indexOf('date');
+        const userIdx = headers.indexOf('user');
+        const textIdx = headers.indexOf('text');
+        const slugIdx = headers.indexOf('slug');
 
-                if (dateIdx === -1 || userIdx === -1 || textIdx === -1) {
-                    throw new Error('CSV должен содержать колонки date, user, text');
-                }
+        if (dateIdx === -1 || userIdx === -1 || textIdx === -1) {
+            throw new Error('CSV должен содержать колонки date, user, text');
+        }
 
-                const posts = [];
-                for (let i = 1; i < lines.length; i++) {
-                    const line = lines[i].trim();
-                    if (!line) continue;
+        const posts = [];
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
 
-                    const values = parseCSVLine(line);
-                    
-                    // Извлекаем значения по индексам, убираем лишние пробелы и кавычки (если остались)
-                    const date = (values[dateIdx] || '').trim().replace(/^"|"$/g, '');
-                    const user = (values[userIdx] || '').trim().replace(/^"|"$/g, '') || 'Аноним';
-                    const text = (values[textIdx] || '').trim().replace(/^"|"$/g, '');
-                    
-                    // Slug: если есть в CSV — берём его, иначе генерируем из текста
-                    let slug = '';
-                    if (slugIdx !== -1 && values[slugIdx]) {
-                        slug = values[slugIdx].trim().replace(/^"|"$/g, '');
-                    } else {
-                        slug = generateSlug(text);
-                    }
-
-                    posts.push({ 
-                        id: i - 1,
-                        date, 
-                        user, 
-                        text, 
-                        slug 
-                    });
-                }
-                return posts;
-            }
-
-            // Рендер таблицы с постами
-            function renderPostsTable(posts) {
-                if (!posts.length) {
-                    tbody.innerHTML = '<tr><td colspan="4" align="center" bgcolor="#F1F1F1" class="empty">📭 В досье пока нет записей.</td></tr>';
-                    if (postCountSpan) postCountSpan.textContent = '0';
-                    if (topicCountSpan) topicCountSpan.textContent = '0';
-                    return;
-                }
-
-                // Сортировка по дате (новые сверху)
-                const sorted = [...posts].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
-
-                let html = '';
-                sorted.forEach((post, index) => {
-                    const rowClass = (index % 2 === 0) ? 'post-row' : 'post-row-alt';
-                    const folderIcon = '📁';
-                    const postLink = `#/post/${post.slug || post.id}`;
-                    
-                    html += `<tr class="${rowClass}">`;
-                    html += `<td class="folder-icon" width="32" align="center" valign="middle" bgcolor="${index%2===0?'#F1F1F1':'#E5E5E5'}">${folderIcon}</td>`;
-                    html += `<td class="post-content" bgcolor="${index%2===0?'#F1F1F1':'#E5E5E5'}">`;
-                    html += `<div class="post-title"><a href="${postLink}">${escapeHtml(post.text.substring(0, 50))}${post.text.length>50?'...':''}</a></div>`;
-                    html += `<div class="post-text">${escapeHtml(post.text.substring(0, 100))}${post.text.length>100?'...':''}</div>`;
-                    html += `</td>`;
-                    html += `<td align="center" valign="middle" bgcolor="${index%2===0?'#F1F1F1':'#E5E5E5'}" class="post-author">${escapeHtml(post.user)}</td>`;
-                    html += `<td align="center" valign="middle" bgcolor="${index%2===0?'#F1F1F1':'#E5E5E5'}" class="post-date">${escapeHtml(post.date)}</td>`;
-                    html += `</tr>`;
-                });
-
-                tbody.innerHTML = html;
-
-                if (postCountSpan) postCountSpan.textContent = sorted.length;
-                if (topicCountSpan) topicCountSpan.textContent = '1';
-            }
-
-            // Отображение одного поста
-            function showSinglePost(post) {
-                if (!post) return;
-                
-                singleTitle.textContent = post.text.substring(0, 50) + (post.text.length > 50 ? '...' : '');
-                singleAuthor.textContent = post.user;
-                singleDate.textContent = post.date;
-                singleText.textContent = post.text;
-                
-                navTitle.textContent = `Просмотр записи`;
-                
-                listView.style.display = 'none';
-                singleView.style.display = 'block';
-            }
-
-            // Показать ленту
-            function showListView() {
-                listView.style.display = 'block';
-                singleView.style.display = 'none';
-                navTitle.textContent = 'Архив записей';
-                if (window.location.hash) {
-                    history.pushState("", document.title, window.location.pathname + window.location.search);
-                }
-            }
-
-            // Роутер
-            function handleHash() {
-                const hash = window.location.hash.substring(1);
-                if (!hash || hash === '/') {
-                    showListView();
-                    return;
-                }
-
-                const match = hash.match(/^\/post\/(.+)$/);
-                if (!match) {
-                    showListView();
-                    return;
-                }
-
-                const slugOrId = match[1];
-                const post = allPosts.find(p => p.slug === slugOrId || p.id.toString() === slugOrId);
-                
-                if (post) {
-                    showSinglePost(post);
-                } else {
-                    showListView();
-                }
-            }
-
-            // Загрузка CSV и инициализация
-            async function loadAndRender() {
-                tbody.innerHTML = '<tr><td colspan="4" align="center" bgcolor="#F1F1F1" class="loading">⚡ Загрузка архива...</td></tr>';
-                try {
-                    const response = await fetch('data.csv');
-                    if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
-                    const csvText = await response.text();
-                    allPosts = parseCSV(csvText);
-                    renderPostsTable(allPosts);
-                    handleHash();
-                } catch (err) {
-                    console.error(err);
-                    tbody.innerHTML = `<tr><td colspan="4" align="center" bgcolor="#F1F1F1" class="error">⚠️ Ошибка загрузки: ${err.message}</td></tr>`;
-                    if (postCountSpan) postCountSpan.textContent = '0';
-                    if (topicCountSpan) topicCountSpan.textContent = '0';
-                }
-            }
-
-            // Обработчики событий
-            window.addEventListener('hashchange', handleHash);
+            const values = parseCSVLine(line);
+            const date = (values[dateIdx] || '').trim().replace(/^"|"$/g, '');
+            const user = (values[userIdx] || '').trim().replace(/^"|"$/g, '') || 'Аноним';
+            const text = (values[textIdx] || '').trim().replace(/^"|"$/g, '');
             
-            if (refreshBtn) {
-                refreshBtn.addEventListener('click', async () => {
-                    await loadAndRender();
-                    showListView();
-                });
+            let slug = '';
+            if (slugIdx !== -1 && values[slugIdx]) {
+                slug = values[slugIdx].trim().replace(/^"|"$/g, '');
+            } else {
+                slug = generateSlug(text);
             }
 
-            if (backBtn) {
-                backBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    showListView();
-                });
-            }
+            posts.push({ 
+                id: i - 1,
+                date, 
+                user, 
+                text, 
+                slug 
+            });
+        }
+        return posts;
+    }
 
-            // Запуск
-            loadAndRender();
-        })();
-    </script>
+    // Рендер одного поста в формат строки таблицы (для ленты)
+    function renderPostRow(post, index) {
+        const rowClass = (index % 2 === 0) ? 'post-row' : 'post-row-alt';
+        const avatarText = post.user.substring(0,2).toUpperCase();
+        // Ссылка на отдельный просмотр
+        const singleLink = `#/post/${post.slug || post.id}`;
+        
+        return `
+            <tr class="${rowClass}">
+                <td class="post-profile">
+                    <div class="avatar-placeholder">
+                        <div class="avatar-img">
+                            [АВАТАР]<br>
+                            <span style="font-size:16px; font-weight:bold;">${escapeHtml(avatarText)}</span>
+                        </div>
+                    </div>
+                    <div class="username">${escapeHtml(post.user)}</div>
+                    <div class="user-title">Исследователь</div>
+                    <div class="user-info">
+                        <div>📅 Регистрация: 01.01.2004</div>
+                        <div>💬 Сообщений: ${Math.floor(Math.random()*500)+50}</div>
+                        <div>⭐ Статус: Активный</div>
+                    </div>
+                </td>
+                <td class="post-message">
+                    <div class="post-header">
+                        <span>📝 Сообщение #${index+1}</span>
+                        <span class="post-date">📅 ${escapeHtml(post.date)}</span>
+                        <a href="${singleLink}" class="post-link" title="Прямая ссылка">🔗</a>
+                    </div>
+                    <div class="post-content">${escapeHtml(post.text)}</div>
+                    <div class="post-signature">
+                        _________________<br>
+                        «Истина где-то рядом»
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+
+    // Рендер одного поста для отдельной страницы
+    function renderSinglePost(post) {
+        const avatarText = post.user.substring(0,2).toUpperCase();
+        return `
+            <tr class="post-row">
+                <td class="post-profile">
+                    <div class="avatar-placeholder">
+                        <div class="avatar-img">
+                            [АВАТАР]<br>
+                            <span style="font-size:16px; font-weight:bold;">${escapeHtml(avatarText)}</span>
+                        </div>
+                    </div>
+                    <div class="username">${escapeHtml(post.user)}</div>
+                    <div class="user-title">Исследователь</div>
+                    <div class="user-info">
+                        <div>📅 Регистрация: 01.01.2004</div>
+                        <div>💬 Сообщений: ${Math.floor(Math.random()*500)+50}</div>
+                        <div>⭐ Статус: Активный</div>
+                    </div>
+                </td>
+                <td class="post-message">
+                    <div class="post-header">
+                        <span>📝 Сообщение</span>
+                        <span class="post-date">📅 ${escapeHtml(post.date)}</span>
+                    </div>
+                    <div class="post-content">${escapeHtml(post.text)}</div>
+                    <div class="post-signature">
+                        _________________<br>
+                        «Истина где-то рядом»
+                    </div>
+                </td>
+            </tr>
+        `;
+    }
+
+    // Отображение всех постов в ленте
+    function renderAllPosts(posts) {
+        if (!posts.length) {
+            postsContainer.innerHTML = '<tr><td colspan="2" class="empty">📭 В теме пока нет сообщений.</td></tr>';
+            postCountSpan.textContent = '0';
+            return;
+        }
+
+        // Сортируем по дате (старые сверху, как в форуме)
+        const sorted = [...posts].sort((a, b) => (a.date || '').localeCompare(b.date || ''));
+        
+        let html = '';
+        sorted.forEach((post, idx) => {
+            html += renderPostRow(post, idx);
+        });
+        postsContainer.innerHTML = html;
+        postCountSpan.textContent = sorted.length;
+    }
+
+    // Показать ленту
+    function showListView() {
+        listView.style.display = 'block';
+        singleView.style.display = 'none';
+        if (window.location.hash) {
+            history.pushState("", document.title, window.location.pathname + window.location.search);
+        }
+    }
+
+    // Показать отдельный пост
+    function showSinglePost(post) {
+        if (!post) return;
+        singlePostContent.innerHTML = renderSinglePost(post);
+        listView.style.display = 'none';
+        singleView.style.display = 'block';
+    }
+
+    // Роутер по хешу
+    function handleHash() {
+        const hash = window.location.hash.substring(1);
+        if (!hash || hash === '/') {
+            showListView();
+            return;
+        }
+        const match = hash.match(/^\/post\/(.+)$/);
+        if (!match) {
+            showListView();
+            return;
+        }
+        const slugOrId = match[1];
+        const post = allPosts.find(p => p.slug === slugOrId || p.id.toString() === slugOrId);
+        if (post) {
+            showSinglePost(post);
+        } else {
+            showListView();
+        }
+    }
+
+    // Загрузка CSV и рендер
+    async function loadAndRender() {
+        postsContainer.innerHTML = '<tr><td colspan="2" class="loading">⚡ Загрузка архива...</td></tr>';
+        try {
+            const response = await fetch('data.csv');
+            if (!response.ok) throw new Error(`Ошибка HTTP: ${response.status}`);
+            const csvText = await response.text();
+            allPosts = parseCSV(csvText);
+            renderAllPosts(allPosts);
+            handleHash(); // после загрузки проверяем, не нужно ли открыть отдельный пост
+        } catch (err) {
+            console.error(err);
+            postsContainer.innerHTML = `<tr><td colspan="2" class="error">⚠️ Ошибка загрузки: ${err.message}</td></tr>`;
+            postCountSpan.textContent = '0';
+        }
+    }
+
+    // Обработчики
+    window.addEventListener('hashchange', handleHash);
+    
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', async () => {
+            await loadAndRender();
+            showListView();
+        });
+    }
+
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            showListView();
+        });
+    }
+
+    if (backToTopicLink) {
+        backToTopicLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            showListView();
+        });
+    }
+
+    // Старт
+    loadAndRender();
+})();
+</script>
 </body>
 </html>
